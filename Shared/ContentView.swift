@@ -45,6 +45,26 @@ struct ContentView: View {
         usedWords.insert(answer, at: 0)
         newWord = ""
     }
+    
+    func startGame() {
+        //1. Find the URL for start.txt in our app bundle
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+            //2. Load start.txt into a string
+            if let startWords = try? String(contentsOf: startWordsURL) {
+                //3. Split the string up into an array of string, splitting on line breaks
+                let allWords = startWords.components(separatedBy: "\n")
+                
+                //4. Pick a random word, or use "silkworm" as a sensible default
+                rootWord = allWords.randomElement() ?? "silkWorm"
+                
+                //Everything worked!
+                return
+            }
+        }
+        
+        //If we are here we royaly messed up
+        fatalError("Failed to start game: Look for start.txt in bundle.")
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
